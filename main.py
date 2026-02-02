@@ -17,10 +17,16 @@ window.config(background=BACKGROUND_COLOR, padx=50, pady=50)
 canvas = Canvas(width=600, height=300, bg=BACKGROUND_COLOR, highlightthickness=0)
 photo_front = PhotoImage(file="./images/card_front.png")
 canvas.create_image(300,150,image=photo_front)
-text_front = canvas.create_text(300,50, text="Title",font=(FONT_NAME, 27, "normal"))
-text_front = canvas.create_text(300,100, text="Word",font=(FONT_NAME, 27, "bold"))
+text_front = canvas.create_text(300,50, text="Title",font=(FONT_NAME, 30, "italic"))
+text_front = canvas.create_text(300,150, text="Word",font=(FONT_NAME, 60, "bold"))
 canvas.grid(column=0, row=0, columnspan=4, pady=25,)
 
+
+# --------------------------- Input --------------------------------
+user_entry = Entry(width=25, font=(FONT_NAME, 14, "normal"),)
+user_entry.focus()
+user_entry.insert(0, "type answer")
+user_entry.grid(column=2, row=1)
 
 
 # ---------------------- X image ------------------------------
