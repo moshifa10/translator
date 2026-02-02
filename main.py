@@ -12,10 +12,24 @@ FONT_NAME = "Courier"
 # ------------------------- Pandas ------------------------------
 data = pd.read_csv(filepath_or_buffer="./data/afrikaans.csv")
 
-words = {row.AFRIKAANS:row.ENGLISH for (index, row) in data.iterrows()}
+words = data.to_dict(orient="records")
+current_card = {}
+# ----------------- Pandas ----------------------
+def next_card():
+    global current_card, timer
+    window.after_cancel(timer)
+    current_card = random.choice(words)
+    canvas.itemconfig(word1, text="Afrikaans", fill="black")
+    canvas.itemconfig(word, text=current_card["AFRIKAANS"], fill="black")
+    canvas.itemconfig(canvas_image, image=photo_front)
+    timer = window.after(3000, func=flip_card)
 
-
-
+def flip_card():
+    canvas.itemconfig(word1, text="English", fill="white")
+    canvas.itemconfig(word, text=current_card["ENGLISH"],fill="white")
+    canvas.itemconfig(canvas_image, image=photo_back)
+    
+    # canvas.create_image(300,150,photo_back)
 # -----------------------  UI -------------------------------
 
 window = Tk()
@@ -23,32 +37,16 @@ window.title("Words learning")
 window.config(background=BACKGROUND_COLOR, padx=50, pady=50)
 
 
+timer = window.after(3000, func=flip_card)
 
-# ----------------- Pandas ----------------------
-def pick():
-    picker = random.choice(list(words.keys()))
-    # canvas.itemconfig(title,"Afrikaans")
-    canvas.itemconfig(word, text=picker)
 
-def picked():
-    photo_back = PhotoImage(file="./images/card_back.png",)
-    canvas.itemconfig(canvas_image, image=photo_back)
-    canvas.config(highlightthickness=3)
-
-def click_wrong():
-    window.after(3000, picked)
-    # time.sleep(3)
-    canvas.itemconfig(canvas_image, image=photo_front)
-    pick()
-
-def click_right():
-    pick()
 # ------------------------ front Image --------------------------
 canvas = Canvas(width=600, height=300, bg=BACKGROUND_COLOR, highlightthickness=0)
+photo_back = PhotoImage(file="./images/card_back.png")
 photo_front = PhotoImage(file="./images/card_front.png")
 canvas_image = canvas.create_image(300,150,image=photo_front)
-title = canvas.create_text(300,50, text="Afrikaans",font=(FONT_NAME, 30, "italic"))
-word = canvas.create_text(300,150, text="word",font=(FONT_NAME, 60, "bold"))
+word1 = canvas.create_text(300,50, text="",font=(FONT_NAME, 30, "italic"))
+word = canvas.create_text(300,150, text="",font=(FONT_NAME, 60, "bold"))
 canvas.grid(column=0, row=0, columnspan=4, pady=25,)
 
 
@@ -62,17 +60,17 @@ user_entry.grid(column=2, row=1)
 # ---------------------- X image ------------------------------
 # x = Canvas(height=100, width=100, bg=BACKGROUND_COLOR, highlightthickness=0)
 x_image = PhotoImage(file="./images/wrong.png")
-wrong = Button(image=x_image, bg=BACKGROUND_COLOR, highlightthickness=0, command=click_wrong)
+wrong = Button(image=x_image, bg=BACKGROUND_COLOR, highlightthickness=0, command=next_card)
 wrong.grid(column=0, row=1)
 
 
 # ---------------------- correct image ------------------------------
 # x = Canvas(height=100, width=100, bg=BACKGROUND_COLOR, highlightthickness=0)
 right_image = PhotoImage(file="./images/right.png")
-right = Button(image=right_image, bg=BACKGROUND_COLOR, highlightthickness=0, command=click_right)
+right = Button(image=right_image, bg=BACKGROUND_COLOR, highlightthickness=0, command=next_card)
 right.grid(column=3, row=1)
 
 
-
+next_card()
 
 window.mainloop()
