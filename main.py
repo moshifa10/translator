@@ -2,6 +2,7 @@ from tkinter import *
 import pandas as pd
 import pprint
 import random
+import time
 
 BACKGROUND_COLOR = "#B1DDC6"
 FONT_NAME = "Courier"
@@ -29,11 +30,15 @@ def pick():
     # canvas.itemconfig(title,"Afrikaans")
     canvas.itemconfig(word, text=picker)
 
-
+def picked():
+    photo_back = PhotoImage(file="./images/card_back.png",)
+    canvas.itemconfig(canvas_image, image=photo_back)
+    canvas.config(highlightthickness=3)
 
 def click_wrong():
-    photo_back = PhotoImage(file="./images/card_back.png")
-    canvas.config()
+    window.after(3000, picked)
+    # time.sleep(3)
+    canvas.itemconfig(canvas_image, image=photo_front)
     pick()
 
 def click_right():
@@ -41,7 +46,7 @@ def click_right():
 # ------------------------ front Image --------------------------
 canvas = Canvas(width=600, height=300, bg=BACKGROUND_COLOR, highlightthickness=0)
 photo_front = PhotoImage(file="./images/card_front.png")
-canvas.create_image(300,150,image=photo_front)
+canvas_image = canvas.create_image(300,150,image=photo_front)
 title = canvas.create_text(300,50, text="Afrikaans",font=(FONT_NAME, 30, "italic"))
 word = canvas.create_text(300,150, text="word",font=(FONT_NAME, 60, "bold"))
 canvas.grid(column=0, row=0, columnspan=4, pady=25,)
