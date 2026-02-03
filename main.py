@@ -10,7 +10,7 @@ FONT_NAME = "Courier"
 
 
 # ------------------------- Pandas ------------------------------
-data = pd.read_csv(filepath_or_buffer="./data/afrikaans.csv")
+data = pd.read_csv(filepath_or_buffer="./data/Afrikaans.csv")
 
 words = data.to_dict(orient="records")
 current_card = {}
@@ -30,6 +30,9 @@ def flip_card():
     canvas.itemconfig(canvas_image, image=photo_back)
     
     # canvas.create_image(300,150,photo_back)
+
+
+    
 # -----------------------  UI -------------------------------
 
 window = Tk()
