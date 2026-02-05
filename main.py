@@ -29,6 +29,13 @@ def flip_card():
     canvas.itemconfig(word, text=current_card["ENGLISH"],fill="white")
     canvas.itemconfig(canvas_image, image=photo_back)
     
+def is_known():
+    words.remove(current_card)
+    print(len(words))
+    data = pd.DataFrame(pd)
+    data.to_csv("data/words_to_learn.csv", index=False)
+    next_card()
+
     # canvas.create_image(300,150,photo_back)
 # -----------------------  UI -------------------------------
 
@@ -67,7 +74,7 @@ wrong.grid(column=0, row=1)
 # ---------------------- correct image ------------------------------
 # x = Canvas(height=100, width=100, bg=BACKGROUND_COLOR, highlightthickness=0)
 right_image = PhotoImage(file="./images/right.png")
-right = Button(image=right_image, bg=BACKGROUND_COLOR, highlightthickness=0, command=next_card)
+right = Button(image=right_image, bg=BACKGROUND_COLOR, highlightthickness=0, command=is_known)
 right.grid(column=3, row=1)
 
 
