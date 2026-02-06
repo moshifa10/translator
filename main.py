@@ -10,15 +10,19 @@ FONT_NAME = "Courier"
 
 
 # ------------------------- Pandas ------------------------------
-data = pd.read_csv(filepath_or_buffer="./data/Afrikaans.csv")
-
-words = data.to_dict(orient="records")
-current_card = {}
+try:
+    data = pd.read_csv("data/words_to_learn.csv")
+except FileNotFoundError:
+    original_data = pd.read_csv("data/Afrikaans.csv")
+    # print(original_data)
+    to_learn = original_data.to_dict(orient="records")
+else:
+    to_learn = data.to_dict(orient="records")
 # ----------------- Pandas ----------------------
 def next_card():
     global current_card, timer
     window.after_cancel(timer)
-    current_card = random.choice(words)
+    current_card = random.choice(to_learn)
     canvas.itemconfig(word1, text="Afrikaans", fill="black")
     canvas.itemconfig(word, text=current_card["AFRIKAANS"], fill="black")
     canvas.itemconfig(canvas_image, image=photo_front)
@@ -30,9 +34,10 @@ def flip_card():
     canvas.itemconfig(canvas_image, image=photo_back)
     
 def is_known():
-    words.remove(current_card)
-    print(len(words))
-    data = pd.DataFrame(pd)
+    to_learn.remove(current_card)
+    print(len(to_learn))
+    data = pd.DataFrame(to_learn)
+    # print(data)   
     data.to_csv("data/words_to_learn.csv", index=False)
     next_card()
 
